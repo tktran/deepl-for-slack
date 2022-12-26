@@ -90,7 +90,7 @@ app.event("reaction_added", async ({ body, client }) => {
     const message = replies.messages[0];
     if (message.text) {
       tokenizer.setEntry(message.text)
-      const message2 = tokenizer.getSentences().join("\n");
+      const message2 = tokenizer.getSentences().join("~");
 
       const translatedText = await deepL.translate(message2, lang)
 
@@ -98,15 +98,13 @@ app.event("reaction_added", async ({ body, client }) => {
         return;
       }
 
-      const translatedText2 = translatedText.split("\n")
-
-      const zip = (a: any[], b: { [x: string]: any; }) => a.map((k, i) => [k, b[i]]);
-      const finalMessage = zip(translatedText2, message2);
+      const translatedText2 = translatedText.split("~")
+      const finalMessage = translatedText2.map( function(element, i) {return element.concat(" / ", message2[i])} ).join("\n")
 
       if (reacjilator.isAlreadyPosted(replies, translatedText)) {
         return;
       }
-      await reacjilator.sayInThread(client, channelId, translatedText, finalMessage);
+      await reacjilator.sayInThread(client, channelId, finalMessage, message);
     }
   }
 });
