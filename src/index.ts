@@ -9,8 +9,8 @@ import { DeepLApi } from './deepl';
 import * as runner from './runnner';
 import * as reacjilator from './reacjilator';
 
-var Tokenizer = require('sentence-tokenizer');
-var tokenizer = new Tokenizer('Chuck');
+// var Tokenizer = require('sentence-tokenizer');
+// var tokenizer = new Tokenizer('Chuck');
 
 const logLevel = process.env.SLACK_LOG_LEVEL as LogLevel || LogLevel.INFO;
 const logger = new ConsoleLogger();
