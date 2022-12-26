@@ -92,19 +92,20 @@ app.event("reaction_added", async ({ body, client }) => {
       tokenizer.setEntry(message.text)
       const message2 = tokenizer.getSentences().join("~");
 
-      const translatedText = await deepL.translate(message2, lang)
+      // const translatedText = await deepL.translate(message2, lang)
+      const translatedText = await deepL.translate(message.text, lang)
 
       if (translatedText == null) {
         return;
       }
 
-      const translatedText2 = translatedText.split("~")
-      const finalMessage = translatedText2.map( function(element, i) {return element.concat(" / ", message2[i])} ).join("\n")
+      // const translatedText2 = translatedText.split("~")
+      // const finalMessage = translatedText2.map( function(element, i) {return element.concat(" / ", message2[i])} ).join("\n")
 
       if (reacjilator.isAlreadyPosted(replies, translatedText)) {
         return;
       }
-      await reacjilator.sayInThread(client, channelId, finalMessage, message);
+      await reacjilator.sayInThread(client, channelId, translatedText, message);
     }
   }
 });
