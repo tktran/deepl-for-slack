@@ -100,7 +100,7 @@ app.event("reaction_added", async ({ body, client }) => {
 
       const translatedText2 = translatedText.split("\n")
 
-      const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+      const zip = (a: any[], b: { [x: string]: any; }) => a.map((k, i) => [k, b[i]]);
       const finalMessage = zip(translatedText2, message2);
 
       if (reacjilator.isAlreadyPosted(replies, translatedText)) {
