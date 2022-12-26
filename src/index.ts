@@ -9,6 +9,8 @@ import { DeepLApi } from './deepl';
 import * as runner from './runnner';
 import * as reacjilator from './reacjilator';
 
+var Tokenizer = require('sentence-tokenizer');
+var tokenizer = new Tokenizer('Chuck');
 
 const logLevel = process.env.SLACK_LOG_LEVEL as LogLevel || LogLevel.INFO;
 const logger = new ConsoleLogger();
@@ -87,14 +89,24 @@ app.event("reaction_added", async ({ body, client }) => {
   if (replies.messages && replies.messages.length > 0) {
     const message = replies.messages[0];
     if (message.text) {
-      const translatedText = await deepL.translate(message.text, lang);
+      tokenizer.setEntry(message.text)
+      const message2 = tokenizer.getSentences().join("\n");
+
+      const translatedText = await deepL.translate(message2, lang)
+
       if (translatedText == null) {
         return;
       }
+
+      const translatedText2 = translatedText.split("\n")
+
+      const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+      const finalMessage = zip(translatedText2, message2);
+
       if (reacjilator.isAlreadyPosted(replies, translatedText)) {
         return;
       }
-      await reacjilator.sayInThread(client, channelId, translatedText, message);
+      await reacjilator.sayInThread(client, channelId, translatedText, finalMessage);
     }
   }
 });
