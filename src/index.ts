@@ -89,19 +89,10 @@ app.event("reaction_added", async ({ body, client }) => {
   if (replies.messages && replies.messages.length > 0) {
     const message = replies.messages[0];
     if (message.text) {
-      tokenizer.setEntry(message.text)
-      const message2 = tokenizer.getSentences().join("~");
-
-      // const translatedText = await deepL.translate(message2, lang)
-      const translatedText = await deepL.translate(message.text, lang)
-
+      const translatedText = await deepL.translate(message.text, lang);
       if (translatedText == null) {
         return;
       }
-
-      // const translatedText2 = translatedText.split("~")
-      // const finalMessage = translatedText2.map( function(element, i) {return element.concat(" / ", message2[i])} ).join("\n")
-
       if (reacjilator.isAlreadyPosted(replies, translatedText)) {
         return;
       }
@@ -118,7 +109,7 @@ app.event("reaction_added", async ({ body, client }) => {
   try {
     await app.init();
     await app.start(Number(process.env.PORT) || 3000);
-    console.log('⚡️ Bolt app2 is running!');
+    console.log('⚡️ Bolt app is running!');
   } catch (e) {
     console.log(e);
     process.exit(1);
